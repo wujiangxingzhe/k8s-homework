@@ -13,9 +13,6 @@ root@master:/opt/go_workspace/k8s-homework-master# cp httpserver /opt/docker/
 
 ## 3. Write dockerfile under docker build context
 ```
-root@master:/opt/go_workspace/k8s-homework-master# go build -o httpserver main.go 
-root@master:/opt/go_workspace/k8s-homework-master# 
-root@master:/opt/go_workspace/k8s-homework-master# 
 root@master:/opt/go_workspace/k8s-homework-master# cd /opt/docker/
 root@master:/opt/docker# 
 root@master:/opt/docker# tree
