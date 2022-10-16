@@ -70,8 +70,7 @@ root@master:/opt/docker# docker ps | grep httpserver
 b1f1feda8b8d   wujiangxingzhe/httpserver:v0.1                      "/bin/httpserver"        10 seconds ago   Up 7 seconds    8080/tcp   httpserver
 root@master:/opt/docker# 
 root@master:/opt/docker# ps -ef | grep httpserver
-root       94005 1721659  0 09:10 pts/1    00:00:00 grep --color=auto httpserver
-root     1760568 1712344  0 Oct15 pts/0    00:00:00 /opt/docker/httpserver
+root      101402 1721659  0 09:14 pts/1    00:00:00 grep --color=auto httpserver
 root     4173611 4173569  0 07:50 ?        00:00:00 /bin/httpserver
 root@master:/opt/docker# 
 root@master:/opt/docker# nsenter -t 4173611 -n ip a
@@ -90,8 +89,10 @@ Accept: */*
 Content-Type: application/json
 User: wujiangxingzhe
 User-Agent: curl/7.68.0
-Date: Sun, 16 Oct 2022 09:11:04 GMT
+Date: Sun, 16 Oct 2022 09:14:15 GMT
 Content-Length: 2
+
+root@master:/opt/docker# 
 ```
 
 ## 6. Push the image to docker hub
