@@ -69,8 +69,29 @@ root@master:/opt/docker#
 root@master:/opt/docker# docker ps | grep httpserver
 b1f1feda8b8d   wujiangxingzhe/httpserver:v0.1                      "/bin/httpserver"        10 seconds ago   Up 7 seconds    8080/tcp   httpserver
 root@master:/opt/docker# 
-root@master:/opt/docker# curl 127.0.0.1:8080
-ok
+root@master:/opt/docker# ps -ef | grep httpserver
+root       94005 1721659  0 09:10 pts/1    00:00:00 grep --color=auto httpserver
+root     1760568 1712344  0 Oct15 pts/0    00:00:00 /opt/docker/httpserver
+root     4173611 4173569  0 07:50 ?        00:00:00 /bin/httpserver
+root@master:/opt/docker# 
+root@master:/opt/docker# nsenter -t 4173611 -n ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+90: eth0@if91: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+root@master:/opt/docker# 
+root@master:/opt/docker# curl -H "Content-Type:application/json" -H "User:wujiangxingzhe" 172.17.0.2:8080 -I
+HTTP/1.1 200 OK
+Accept: */*
+Content-Type: application/json
+User: wujiangxingzhe
+User-Agent: curl/7.68.0
+Date: Sun, 16 Oct 2022 09:11:04 GMT
+Content-Length: 2
 ```
 
 ## 6. Push the image to docker hub
