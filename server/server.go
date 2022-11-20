@@ -5,7 +5,10 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/wujiangxingzhe/k8s-homework/middleware"
@@ -32,16 +35,30 @@ func NewServer(addr string) *Server {
 	return srv
 }
 
-func (s *Server) ListenAndServe() error {
-	err := s.srv.ListenAndServe()
-	if err != nil {
-		return err
+func (s *Server) ListenAndServe() {
+	go func() {
+		s.srv.ListenAndServe()
+	}()
+
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan, syscall.SIGUSR1)
+	select {
+	case <-signalChan:
+		fmt.Printf("gracefull shutdown, service will be closed after 5s")
+		time.Sleep(time.Second * 5)
+		s.Close()
 	}
-	return nil
+}
+
+func (s *Server) Close() {
+	err := s.srv.Close()
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (s *Server) EchoHeader(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("remote addr: %s, resp code:\n", strings.Split(r.RemoteAddr, ":")[0])
+	// fmt.Printf("remote addr: %s, resp code:\n", strings.Split(r.RemoteAddr, ":")[0])
 	for k, v := range r.Header {
 		w.Header().Set(k, strings.Join(v, ";"))
 		// io.WriteString(w, fmt.Sprintf("%s: %s\n", k, strings.Join(v, ";")))
