@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpserver-ingress
+#  annotations: (deprecated)
+#    kubernetes.io/ingress.class:"nginx" (deprecated)
+spec:
+  ingressClassName: "nginx"
+  tls:
+    - hosts:
+        - wujingxingzhe.com
+      secretName: wujiangxingzhe-tls
+  rules:
+    - host: wujiangxingzhe.com
+      http:
+        paths:
+          - path: "/healthz"
+            pathType: Exact
+            backend:
+              service: 
+                name: httpserver-service
+                port:
+                  number: 8080
+          - path: "/"
+            pathType: Prefix
+            pathType: Exact
+            backend:
+              service: 
+                name: httpserver-service
+                port:
+                  number: 8080
+  defaultBackend:
+    service: 
+      name: httpserver-service
+      port:
+        number: 8080
